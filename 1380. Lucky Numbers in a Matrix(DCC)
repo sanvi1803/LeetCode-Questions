@@ -1,0 +1,47 @@
+class Solution {
+private:
+
+    vector<int> findCommonElements(vector<int>& vec1, vector<int>& vec2) {   
+        unordered_set<int> elementsSet(vec1.begin(), vec1.end());
+        vector<int> commonElements;
+        for (int element : vec2) {
+            if (elementsSet.find(element) != elementsSet.end()) {
+                commonElements.push_back(element);
+                elementsSet.erase(element);
+            }
+        }
+        
+        return commonElements;
+    }
+public:
+
+    vector<int> luckyNumbers (vector<vector<int>>& matrix) {
+        int n = matrix.size(); //row
+        int m = matrix[0].size(); //column
+        vector<int> minArray,maxArray;
+
+        for (int i = 0; i < n; i++) {
+            int mini = INT_MAX;
+            for (int j = 0; j < m; j++) {
+                mini = min(mini, matrix[i][j]);
+            }
+            minArray.push_back(mini);
+        }
+
+        for (int j = 0; j < m; j++) {
+            int maxi = INT_MIN;
+            for (int i = 0; i < n; i++) {
+                maxi = max(maxi, matrix[i][j]);
+            }
+            maxArray.push_back(maxi);
+        }  
+
+        // for(int i : minArray){
+        //     cout << i << " ";
+        // }
+        // for(int i : maxArray){
+        //     cout << i << " ";
+        // }
+        return findCommonElements(minArray,maxArray);
+    }
+};
