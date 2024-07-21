@@ -1,0 +1,20 @@
+class Solution {
+public:
+/*Consider a range [0,i] , having sum S1.
+Another range [0,j] having sum S2, where j > i.
+If S2 - k is seen earlier, then the sum of range j-i will defintely be k.
+So simply keep stroing cumSum everytime during the forward movement, and always query if we have seen 
+cumSum - k is there in the hashtable, if yes, we have found one range whose sum is k.*/
+
+    int subarraySum(vector<int>& nums, int k) {
+        unordered_map<int, int> hashtable;
+        hashtable[0] = 1; // just to find the range [0,j]
+        int cumSum = 0, count = 0;
+        for(int i = 0; i < nums.size(); ++i) {
+            cumSum += nums[i];
+            count += hashtable[cumSum-k];
+            hashtable[cumSum]++;
+        }
+        return count;
+    }
+};
