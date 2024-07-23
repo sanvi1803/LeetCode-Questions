@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<int> frequencySort(vector<int>& nums) {
+        // Step 1: Count the frequency of each element
+        unordered_map<int, int> freqMap;
+        for (int num : nums) {
+            freqMap[num]++;
+        }
+
+        // Step 2: Create a bucket to store numbers based on frequency
+        // The size of the bucket is nums.size() + 1 to handle the maximum frequency
+        vector<vector<int>> bucket(nums.size() + 1);
+        for (const auto& p : freqMap) {
+            int num = p.first;
+            int freq = p.second;
+            bucket[freq].push_back(num);
+        }
+
+        // Step 3: Collect results from the bucket
+        vector<int> result;
+        for (int i = 1; i < bucket.size(); ++i) {
+            if (!bucket[i].empty()) {
+                // Sort the numbers in decreasing order
+                sort(bucket[i].rbegin(), bucket[i].rend());
+                for (int num : bucket[i]) {
+                    result.insert(result.end(), i, num);
+                }
+            }
+        }
+
+        return result;
+    }
+};
