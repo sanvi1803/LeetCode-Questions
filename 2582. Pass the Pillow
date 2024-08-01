@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int passThePillow(int n, int time) {
+        int round = time / ( n - 1);
+        int pos = time % (n - 1);
+
+        // if noof round is odd i.e moving oppposite direction
+        if(round & 1){
+            pos = (n - pos);
+        }
+        else{
+            pos++;
+        }
+        return pos;
+    }
+};
