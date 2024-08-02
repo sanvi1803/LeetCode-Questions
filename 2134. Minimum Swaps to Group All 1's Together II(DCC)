@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minSwaps(vector<int>& nums) {
+        int n = nums.size();
+        int numOnes = 0;
+        for(int i : nums){
+            if(i == 1)
+                numOnes++;
+        }
+        if(numOnes <= 1) return 0;
+        int k = numOnes;
+        int cnt = 0;
+        for(int i = 0;i < k ;i++){
+            if(nums[i] == 1)
+                cnt++;
+        }
+        int maxCount = cnt;
+        for(int i = k;i < n + k;i++){
+            if(nums[i - k] == 1) cnt--; //it means that if the element we wer reemoving was 1 then reduce the count
+            if(nums[i % n] == 1) cnt++;
+            maxCount = max(maxCount,cnt); 
+        }
+
+        return (k - maxCount);
+    }
+};
