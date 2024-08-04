@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int rangeSum(vector<int>& nums, int n, int left, int right) {
+        vector<int> sum;
+        long long mod = (1e9 + 7);
+        int prefixsumm = 0;
+        for(int i = 0; i < n;i++){
+            prefixsumm = 0;
+            for(int j = i;j < n;j++){
+                
+                prefixsumm += nums[j];
+                sum.push_back(prefixsumm);
+            }
+            
+        }
+        sort(sum.begin(),sum.end());
+        long long result = 0;
+        for(int i = left - 1; i < right;i++){
+            result = (result + sum[i]) % mod; 
+        }
+        
+        return result;
+    }
+};
