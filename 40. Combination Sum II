@@ -1,0 +1,27 @@
+class Solution {
+public:
+    void helper(int index,vector<int>& arr, int target,vector<vector<int>>& result,
+        vector<int>& temp){
+            //base case
+            if(target==0){
+                result.push_back(temp);
+                return;
+            }
+
+            for(int i = index;i < arr.size();i++){
+                if(i > index && arr[i] == arr[i-1])
+                    continue;
+                if(arr[i] > target) break;
+                temp.push_back(arr[i]);//push elements into the array 
+                helper(i + 1,arr,target - arr[i],result,temp);
+                temp.pop_back(); //to backtrack
+            }
+        }
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
+        vector<vector<int>> result;
+        vector<int> temp;
+        helper(0,candidates,target,result,temp);
+        return result;
+    }
+};
