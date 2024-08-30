@@ -1,0 +1,92 @@
+class Solution {
+public:
+    const long long INF = 1000000000000000LL;
+    const int large = 1000000000;
+
+    vector<vector<pair<int,int>>> adj;
+
+    void createAdjacencyList(vector<vector<int>>& edges,int n){
+        adj.resize(n);
+
+        for(const auto& edge : edges){
+            if (edge[2] == -1) {
+                continue;
+            }
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+            adj[u].emplace_back(v,wt);
+            adj[v].emplace_back(u,wt);
+        }
+    }
+
+    void dijkstra(int src,vector<long long>& dist){
+        queue<int> q;
+        dist[src] = 0;
+        q.push(src);
+
+        while(!q.empty()){
+            int u = q.front();
+            q.pop();
+
+            for(auto &pair : adj[u]){
+                int v = pair.first;
+                int wt = pair.second;
+                if(dist[v] > dist[u] + wt){
+                    dist[v] = dist[u] + wt;
+                    q.push(v);
+                }
+            }
+        }
+    }
+    vector<vector<int>> modifiedGraphEdges(int n, vector<vector<int>>& edges, int src, int dest, int target) {
+        createAdjacencyList(edges,n);
+        vector<long long> dist(n,INF);
+
+        dijkstra(src,dist);
+
+        if(dist[dest] < target){
+            return {};
+        }
+
+        //we found correct value for all edgeweight using positive edge weights only then all remaining edges having edge weight as 1 needs to have a arbitrary large value and return ans
+        if(dist[dest] == target){
+            for(auto& edge : edges){
+                if(edge[2] == -1) edge[2] = large;
+            }
+            return edges;
+        }
+
+        //now including -ve edge weights and checking again
+        for(int i = 0;i < edges.size();i++){
+            auto& edge = edges[i];
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+
+            //now make all -ve edge weight as 1 and add to adj list and now apply dijkstra
+            if(wt == -1){
+                edge[2] = 1;
+                adj[u].emplace_back(v,1);
+                adj[v].emplace_back(u,1);
+
+                
+                fill(dist.begin(),dist.end(),INF);
+
+                dijkstra(src,dist);
+
+                if(dist[dest] <= target){
+                    edge[2] += (target - dist[dest]);
+                    //for remaining edges make them arbitrary large value
+                    for (int j = i + 1; j < edges.size(); j++) {
+                        if (edges[j][2] == -1) {
+                            edges[j][2] = large; 
+                        }
+                    }
+                    return edges;
+                }
+            }
+        }
+        return {};
+    }
+};
