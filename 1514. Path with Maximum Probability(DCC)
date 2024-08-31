@@ -1,0 +1,33 @@
+class Solution {
+public:
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start_node, int end_node) {
+        vector<double> maxProb(n,0.0);
+        maxProb[start_node] = 1.0;
+
+        //using djikstra algo and it's modified version
+        //now running for n-1 since we relax for n - 1 times
+        for(int i = 0;i < n - 1;i++){
+            bool updated = false;
+            //checking for all the edges
+            for(int j = 0;j < edges.size();j++){
+                int u = edges[j][0];
+                int v = edges[j][1];
+                double prob = succProb[j];
+
+                if(maxProb[u] * prob > maxProb[v]){
+                    maxProb[v] = maxProb[u] * prob;
+                    updated = true;
+                } 
+                if(maxProb[v] * prob > maxProb[u]){
+                    maxProb[u] = maxProb[v] * prob;
+                    updated = true;
+                } 
+            }
+            if(!updated)
+                    break; 
+                    //if values are not updated even after checking it means 
+                    // there is no possibility of further updation therefore break out of loop
+        }
+        return maxProb[end_node];
+    }
+};
