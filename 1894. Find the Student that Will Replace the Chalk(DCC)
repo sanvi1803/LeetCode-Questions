@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int chalkReplacer(vector<int>& chalk, int totalChalks) {
+        long long totalChalksNeeded = 0;
+        for(auto& chalks : chalk){
+            totalChalksNeeded+=chalks;
+        }
+
+        int remainingChalks = totalChalks % totalChalksNeeded;
+        //this basically gives chalks for single iteration now 
+
+        for(int studentIndex = 0;studentIndex < chalk.size();studentIndex++){
+            if(remainingChalks < chalk[studentIndex])
+                return studentIndex;
+            remainingChalks-=chalk[studentIndex];
+        }
+        return 0;
+    }
+};
